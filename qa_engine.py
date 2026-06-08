@@ -4,14 +4,15 @@ from embedder import retrieve
 import os
 import streamlit as st
 
-try:
-    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
-except:
-   GROQ_API_KEY = os.getenv("GROQ_API_KEY", "your-groq-key-here")
-
-client = Groq(api_key=GROQ_API_KEY)
+def get_client():
+    try:
+        key = st.secrets["GROQ_API_KEY"]
+    except:
+        key = os.getenv("GROQ_API_KEY", "your-groq-key-here")
+    return Groq(api_key=key)
 
 def ask(query: str, index, chunks) -> dict:
+    client = get_client()
     results = retrieve(query, index, chunks, top_k=TOP_K)
     context = "\n\n".join([r["text"] for r in results])
     prompt = f"""You are a helpful assistant. Answer the question using only the context below.
