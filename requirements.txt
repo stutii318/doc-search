@@ -8,3 +8,5 @@ google-genai
 streamlit
 numpy
 groq
+python-dotenv
+fpdf2
